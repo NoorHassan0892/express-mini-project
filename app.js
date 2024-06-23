@@ -8,6 +8,7 @@ const cors = require("cors");
 const ErrorHandler = require("./Middleware/ErrorHandler");
 const NotFound = require("./Middleware/NotFound");
 const path = require("path");
+const authorRouter = require("./apis/author.js/routes");
 
 app.use(express.json());
 app.use(morgan("dev"));
@@ -16,7 +17,9 @@ app.use(cors());
 app.use("/media", express.static(path.join(__dirname, "media")));
 
 app.use("/Books", BooksRouter);
+app.use("/authors", authorRouter);
 app.use(ErrorHandler);
+
 app.use(NotFound);
 connectDB();
 

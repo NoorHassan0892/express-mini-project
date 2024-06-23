@@ -19,4 +19,6 @@ BooksRouter.delete("/:id", DeleteBook);
 
 BooksRouter.post("/:id", UpdateBooks);
 
+BooksRouter.post("/:authorId", CreateBook);
+
 module.exports = BooksRouter;

@@ -4,7 +4,7 @@ const Book = require("../../models/Books");
 const getAllBooks = async (req, res, next) => {
   try {
     const books = await Book.find();
-    return res.json(books);
+    return res.status(200).json(books);
   } catch (error) {
     return next(error);
   }
@@ -29,15 +29,28 @@ const getOneBook = async (req, res, next) => {
 
 const CreateBook = async (req, res, next) => {
   try {
-    if (req.file) {
-      req.body.image = req.file.path;
-    }
-    const newBook = await Book.create(req.body);
-    if (newBook) {
-      return res.status(201).json(newBook);
-    } else {
-      return rec.status(404).json({ msg: "Create a Book is faild! " });
-    }
+    const authorId = req.params.authorId;
+    const book = {
+      name: req.body.name,
+      author: authorId,
+      price: req.body.price,
+    };
+    const newBook = await Book.create(book);
+    newBook._id;
+
+    await Author.findByIdAndUpdate(authorId, {
+      $push: { books: newBook._id },
+    });
+
+    // if (req.file) {
+    //   req.body.image = req.file.path;
+    // }
+    // const newBook = await Book.create(req.body);
+    // if (newBook) {
+    //   return res.status(201).json(newBook);
+    // } else {
+    //   return rec.status(404).json({ msg: "Create a Book is faild! " });
+    // }
   } catch (error) {
     return next(error);
   }
